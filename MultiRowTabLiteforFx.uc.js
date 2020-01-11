@@ -3,8 +3,9 @@
 // @namespace      http://space.geocities.yahoo.co.jp/gl/alice0775
 // @description    Mehrzeilige Tableiste, Experimentelle CSS Version
 // @include        main
-// @compatibility  Firefox 69
+// @compatibility  Firefox 72
 // @author         Alice0775
+// @version        2020/01/12 00:00 Firefox 72 TroudhuK
 // @version        2019/09/14 00:00 Firefox 69 TroudhuK
 // @version        2016/08/05 00:00 Firefox 48
 // @version        2016/05/01 00:01 hide favicon if busy
@@ -117,7 +118,6 @@ function zzzz_MultiRowTabLite() {
             newMarginX *= -1;
 
         ind.style.transform = "translate(" + Math.round(newMarginX) + "px," + Math.round(newMarginY) + "px)"; // multirow fix
-        ind.style.marginInlineStart = (-ind.clientWidth) + "px";
     };
     gBrowser.tabContainer.addEventListener("dragover", gBrowser.tabContainer._onDragOver, false);
 
