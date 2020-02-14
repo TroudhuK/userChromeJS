@@ -3,8 +3,9 @@
 // @namespace      http://space.geocities.yahoo.co.jp/gl/alice0775
 // @description    Mehrzeilige Tableiste, Experimentelle CSS Version
 // @include        main
-// @compatibility  Firefox 72
+// @compatibility  Firefox 73
 // @author         Alice0775
+// @version        2020/02/14 00:00 Firefox 73 TroudhuK
 // @version        2020/01/12 00:00 Firefox 72 TroudhuK
 // @version        2019/09/14 00:00 Firefox 69 TroudhuK
 // @version        2016/08/05 00:00 Firefox 48
@@ -101,14 +102,14 @@ function zzzz_MultiRowTabLite() {
                 newMarginX = tabRect.right - rect.left;
             else
                 newMarginX = rect.right - tabRect.left;
-            newMarginY = tabRect.top + tabRect.height - rect.top - rect.height; // multirow fix
+            newMarginY = tabRect.top + tabRect.height - rect.top - rect.height + 6; // multirow fix
         } else {
             let tabRect = tabs[newIndex].getBoundingClientRect();
             if (!RTL_UI)
                 newMarginX = tabRect.left - rect.left;
             else
                 newMarginX = rect.right - tabRect.right;
-            newMarginY = tabRect.top + tabRect.height - rect.top - rect.height; // multirow fix
+            newMarginY = tabRect.top + tabRect.height - rect.top - rect.height + 6; // multirow fix
         }
 
         ind.hidden = false;
