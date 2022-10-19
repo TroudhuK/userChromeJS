@@ -173,7 +173,7 @@ function orig_getDropEffectForTabDrag(event) {
     
     if (isMovingTabs) {
         let sourceNode = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-        if (sourceNode instanceof XULElement &&
+        if (XULElement.isInstance(sourceNode) &&
             sourceNode.localName == "tab" &&
             sourceNode.ownerGlobal.isChromeWindow &&
             sourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser" &&
@@ -186,6 +186,9 @@ function orig_getDropEffectForTabDrag(event) {
 
             if (window.gMultiProcessBrowser !=
                 sourceNode.ownerGlobal.gMultiProcessBrowser)
+                return "none";
+
+            if (window.gFissionBrowser != sourceNode.ownerGlobal.gFissionBrowser)
                 return "none";
 
             return dt.dropEffect == "copy" ? "copy" : "move";
