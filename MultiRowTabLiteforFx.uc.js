@@ -5,6 +5,7 @@
 // @include        main
 // @compatibility  Firefox 73
 // @author         Alice0775
+// @version        2022/10/19 00:00 Firefox 106 TroudhuK
 // @version        2020/02/14 00:00 Firefox 73 TroudhuK
 // @version        2020/01/12 00:00 Firefox 72 TroudhuK
 // @version        2019/09/14 00:00 Firefox 69 TroudhuK
@@ -67,7 +68,7 @@ function zzzz_MultiRowTabLite() {
         return tabs.length;
     };
 
-    gBrowser.tabContainer._getDropEffectForTabDrag = function(event){return "";}; // multirow fix: to make the default "dragover" handler does nothing
+    gBrowser.tabContainer.getDropEffectForTabDrag = function(event){return "";}; // multirow fix: to make the default "dragover" handler does nothing
 
     gBrowser.tabContainer._onDragOver = function(event) {
         event.preventDefault();
@@ -156,7 +157,7 @@ function zzzz_MultiRowTabLite() {
     gBrowser.tabContainer.addEventListener("drop", function(event){this.onDrop(event);}, false);
 }
 
-// copy of the original and overrided _getDropEffectForTabDrag method
+// copy of the original and overrided getDropEffectForTabDrag method
 function orig_getDropEffectForTabDrag(event) {
     var dt = event.dataTransfer;
 
