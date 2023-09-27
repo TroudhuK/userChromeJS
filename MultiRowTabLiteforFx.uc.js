@@ -5,6 +5,7 @@
 // @include        main
 // @compatibility  Firefox 73
 // @author         Alice0775
+// @version        2023/05/26 00:00 Firefox 112 TroudhuK
 // @version        2022/10/19 00:00 Firefox 106 TroudhuK
 // @version        2020/02/14 00:00 Firefox 73 TroudhuK
 // @version        2020/01/12 00:00 Firefox 72 TroudhuK
@@ -19,7 +20,7 @@
 function zzzz_MultiRowTabLite() {
     gBrowser.tabContainer._getDropIndex = function(event, isLink) {
         var tabs = this.allTabs;
-        var tab = this._getDragTargetTab(event, isLink);
+        var tab = this._getDragTargetTab(event, { ignoreTabSides: isLink });
         if (!RTL_UI) {
             for (let i = tab ? tab._tPos : 0; i < tabs.length; i++) {
                 if (
@@ -78,7 +79,7 @@ function zzzz_MultiRowTabLite() {
 
         var effects = orig_getDropEffectForTabDrag(event);
         if (effects == "link") {
-        	let tab = this._getDragTargetTab(event, true);
+        	let tab = this._getDragTargetTab(event, { ignoreTabSides: true });
         	if (tab) {
         		if (!this._dragTime)
         			this._dragTime = Date.now();
