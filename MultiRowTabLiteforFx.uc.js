@@ -136,7 +136,7 @@ function zzzz_MultiRowTabLite() {
             if (!draggedTab)
                 return;
             movingTabs = (draggedTab.multiselected ? gBrowser.selectedTabs : [draggedTab]).filter(t => t.pinned == draggedTab.pinned);
-            draggedTab.container._finishGroupSelectedTabs(draggedTab);
+            draggedTab.container._finishMoveTogetherSelectedTabs(draggedTab);
         }
         var dropEffect = dt.dropEffect;
         if (draggedTab && dropEffect == "copy") {}
