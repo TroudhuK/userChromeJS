@@ -392,7 +392,7 @@ function zzzz_MultiRowTabLite() {
           }
           let overGroupLabel = isTabGroupLabel(target);
           if (
-            !tab.hasAttribute("pending") && // annoying fix
+            !target.hasAttribute("pending") && // annoying fix
             Date.now() >=
             this._dragTime +
               Services.prefs.getIntPref(
@@ -437,7 +437,8 @@ function zzzz_MultiRowTabLite() {
         newMarginX = pixelsToScroll > 0 ? maxMargin : minMargin;
       } else*/ {
         this._dragIndex = this.orig_getDropIndex(event);
-        this._multiSelectedOffset = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0)._dragData.movingTabs.filter(t => t.elementIndex < this._dragIndex).length;
+        let draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
+        this._multiSelectedOffset = draggedTab ? draggedTab._dragData.movingTabs.filter(t => t.elementIndex < this._dragIndex).length : 0;
         let children = this.ariaFocusableItems;
         if (this._dragIndex == children.length) {
           let itemRect = children.at(-1).getBoundingClientRect();
