@@ -3,8 +3,9 @@
 // @namespace      http://space.geocities.yahoo.co.jp/gl/alice0775
 // @description    Mehrzeilige Tableiste, Experimentelle CSS Version
 // @include        main
-// @compatibility  Firefox 138
+// @compatibility  Firefox 140
 // @author         Alice0775
+// @version        2025/07/08 00:00 Firefox 140 TroudhuK
 // @version        2025/05/04 00:00 Firefox 138 TroudhuK
 // @version        2024/12/14 00:00 Firefox 133 TroudhuK
 // @version        2023/05/26 00:00 Firefox 112 TroudhuK
@@ -229,7 +230,7 @@ function zzzz_MultiRowTabLite() {
       let dragImageOffset = -16;
       let browser = isTab(tab) && tab.linkedBrowser;
       if (isTabGroupLabel(tab)) {
-        toDrag = document.getElementById("tab-drag-empty-feedback");
+        toDrag = tab;
       } else if (gMultiProcessBrowser) {
         var context = canvas.getContext("2d");
         context.fillStyle = "white";
@@ -290,6 +291,9 @@ function zzzz_MultiRowTabLite() {
 
       let tabOffset = clientPos(tab) - clientPos(this);
 
+      let movingTabs = tab.multiselected ? gBrowser.selectedTabs : [tab];
+      let movingTabsSet = new Set(movingTabs);
+
       tab._dragData = {
         offsetX: this.verticalMode
           ? event.screenX - window.screenX
@@ -303,7 +307,8 @@ function zzzz_MultiRowTabLite() {
             : this.arrowScrollbox.scrollPosition,
         screenX: event.screenX,
         screenY: event.screenY,
-        movingTabs: tab.multiselected ? gBrowser.selectedTabs : [tab],
+        movingTabs,
+        movingTabsSet,
         fromTabList,
         tabGroupCreationColor: gBrowser.tabGroupMenu.nextUnusedColor,
         expandGroupOnDrop,
@@ -437,8 +442,6 @@ function zzzz_MultiRowTabLite() {
         newMarginX = pixelsToScroll > 0 ? maxMargin : minMargin;
       } else*/ {
         this._dragIndex = this.orig_getDropIndex(event);
-        let draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
-        this._multiSelectedOffset = draggedTab ? draggedTab._dragData.movingTabs.filter(t => t.elementIndex < this._dragIndex).length : 0;
         let children = this.ariaFocusableItems;
         if (this._dragIndex == children.length) {
           let itemRect = children.at(-1).getBoundingClientRect();
@@ -476,28 +479,35 @@ function zzzz_MultiRowTabLite() {
 
     gBrowser.tabContainer.onDrop = function(event) {
         var dt = event.dataTransfer;
-
+        var dropEffect = dt.dropEffect;
         var draggedTab;
         let movingTabs;
         if (dt.mozTypesAt(0)[0] == TAB_DROP_TYPE) {
             // tab copy or move
             draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
             // not our drop then
-            if (!draggedTab)
+            if (!draggedTab) {
                 return;
+            }
             movingTabs = (draggedTab.multiselected ? gBrowser.selectedTabs : [draggedTab]).filter(t => t.pinned == draggedTab.pinned);
             draggedTab.container.finishMoveTogetherSelectedTabs(draggedTab);
         }
 
         this._tabDropIndicator.hidden = true;
 
-        var dropEffect = dt.dropEffect;
         if (draggedTab && dropEffect == "copy") {}
         else if (draggedTab && draggedTab.container == this) {
-            this._dragIndex -= this._multiSelectedOffset;
+            event.stopPropagation();
+            let directionForward = false;
+            if (this._dragIndex > movingTabs[0].elementIndex) {
+                this._dragIndex--;
+                directionForward = true;
+            }
             for (let tab of movingTabs) {
                 gBrowser.moveTabTo(tab, { elementIndex: this._dragIndex });
-                this._dragIndex++;
+                if (!directionForward) {
+                    this._dragIndex++;
+                }
             }
         }
 
