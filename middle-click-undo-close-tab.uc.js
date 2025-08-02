@@ -21,7 +21,7 @@
         if (e.target.localName != 'arrowscrollbox') {
             return;
         }
-        undoCloseTab(0);
+        SessionWindowUI.undoCloseTab(window);
         e.preventDefault();
         e.stopPropagation();
     }
