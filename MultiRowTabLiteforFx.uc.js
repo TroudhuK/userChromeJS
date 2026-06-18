@@ -5,6 +5,7 @@
 // @include        main
 // @compatibility  Firefox 140
 // @author         Alice0775
+// @version        2029/06/19 00:00 Firefox 152 TroudhuK
 // @version        2025/11/24 00:00 Firefox 145 TroudhuK
 // @version        2025/07/08 00:00 Firefox 140 TroudhuK
 // @version        2025/05/04 00:00 Firefox 138 TroudhuK
@@ -1427,7 +1428,7 @@ function zzzz_MultiRowTabLite() {
       if (this.#tabbrowserTabs.expandOnHover) {
         // Query the expanded width from sidebar launcher to ensure tabs aren't
         // cut off (Bug 1974037).
-        const { SidebarController } = tab.ownerGlobal;
+        const { SidebarController } = tab.documentGlobal;
         SidebarController.expandOnHoverComplete.then(async () => {
           const width = await window.promiseDocumentFlushed(
             () => SidebarController.sidebarMain.clientWidth
@@ -2472,7 +2473,7 @@ function zzzz_MultiRowTabLite() {
       );
       pinnedDropIndicator.removeAttribute("visible");
       pinnedDropIndicator.removeAttribute("interactive");
-      draggedTabDocument.ownerGlobal.gBrowser.tabContainer.style.maxWidth = "";
+      draggedTabDocument.documentGlobal.gBrowser.tabContainer.style.maxWidth = "";
       let allTabs = draggedTabDocument.getElementsByClassName("tabbrowser-tab");
       for (let tab of allTabs) {
         tab.style.width = "";
@@ -2544,7 +2545,7 @@ function zzzz_MultiRowTabLite() {
         let sourceNode = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
         if (
           (isTab(sourceNode) || isTabGroupLabel(sourceNode)) &&
-          sourceNode.ownerGlobal.isChromeWindow &&
+          sourceNode.documentGlobal.isChromeWindow &&
           sourceNode.ownerDocument.documentElement.getAttribute("windowtype") ==
             "navigator:browser"
         ) {
@@ -2552,20 +2553,20 @@ function zzzz_MultiRowTabLite() {
           // and vice versa.
           if (
             PrivateBrowsingUtils.isWindowPrivate(window) !=
-            PrivateBrowsingUtils.isWindowPrivate(sourceNode.ownerGlobal)
+            PrivateBrowsingUtils.isWindowPrivate(sourceNode.documentGlobal)
           ) {
             return "none";
           }
 
           if (
             window.gMultiProcessBrowser !=
-            sourceNode.ownerGlobal.gMultiProcessBrowser
+            sourceNode.documentGlobal.gMultiProcessBrowser
           ) {
             return "none";
           }
 
           if (
-            window.gFissionBrowser != sourceNode.ownerGlobal.gFissionBrowser
+            window.gFissionBrowser != sourceNode.documentGlobal.gFissionBrowser
           ) {
             return "none";
           }
